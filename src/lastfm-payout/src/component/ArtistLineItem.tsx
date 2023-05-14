@@ -16,15 +16,15 @@ export default function ArtistLineItem(props: ArtistLineItemProps) {
     <Card>
       <Card.Body>
         <Grid.Container>
-          <Grid xs={1}>
+          <Grid xs={0}>
             <img src={props.image}></img>
           </Grid>
-          <Grid xs={2}>{props.name}</Grid>
+          <Grid xs={3}>{props.name}</Grid>
           <Grid xs={1}>{props.plays}</Grid>
-          <Grid xs={1}>
+          <Grid xs={2}>
             ${props.totalPay.spotify} (${props.realPay.spotify})
           </Grid>
-          <Grid xs={1}>
+          <Grid xs={2}>
             ${props.totalPay.appleMusic} (${props.realPay.appleMusic})
           </Grid>
         </Grid.Container>

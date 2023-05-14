@@ -1,14 +1,17 @@
 import "./App.css";
 import { Outlet } from "react-router-dom";
-import { Text } from "@nextui-org/react";
+import { Container, Spacer, Text } from "@nextui-org/react";
 
 function App() {
   return (
-    <>
-      <Text h2>Find shame in how much you consume</Text>
-      <hr />
+    <Container>
+      <Spacer y={3} />
+      <Text h2>How much have you paid to artists?</Text>
+
+      <Spacer y={3} />
+
       <Outlet />
-    </>
+    </Container>
   );
 }
 

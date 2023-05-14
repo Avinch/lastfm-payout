@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import lastFmService from "../services/lastFmService";
-import { Text } from "@nextui-org/react";
+import { Container, Grid, Loading, Text } from "@nextui-org/react";
 
 import { useParams } from "react-router-dom";
 import Artist from "../models/Artist";
@@ -37,7 +37,6 @@ export default function Results() {
         setLoading(true);
         const service = new lastFmService();
         var data = await service.GetRankings(username);
-        console.log(data);
 
         if (data) {
           mapResults(data.topartists.artist);
@@ -84,8 +83,6 @@ export default function Results() {
         totalPlays: totalPlays,
       } as ResultDetails;
 
-      console.log("fullResults", results);
-
       setResults(results);
     };
 
@@ -95,7 +92,7 @@ export default function Results() {
   return (
     <>
       {loading ? (
-        <h1>loading</h1>
+        <Loading>Loading data from last.fm</Loading>
       ) : (
         <>
           <Text h3>Results for {username}</Text>
@@ -103,20 +100,22 @@ export default function Results() {
             {results.totalPlays} plays for {results.artists.length} artists
           </Text>
           {results && (
-            <ul>
+            <Grid.Container gap={1} xs={12} css={{ width: "50%" }}>
               {results.artists.map((x) => {
                 return (
-                  <ArtistLineItem
-                    name={x.name}
-                    rank={x.rank}
-                    plays={x.playCount}
-                    image={x.thumbImage}
-                    totalPay={x.totalPay}
-                    realPay={x.realPay}
-                  />
+                  <Grid>
+                    <ArtistLineItem
+                      name={x.name}
+                      rank={x.rank}
+                      plays={x.playCount}
+                      image={x.thumbImage}
+                      totalPay={x.totalPay}
+                      realPay={x.realPay}
+                    />
+                  </Grid>
                 );
               })}
-            </ul>
+            </Grid.Container>
           )}
         </>
       )}
