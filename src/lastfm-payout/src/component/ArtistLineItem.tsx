@@ -1,11 +1,14 @@
 import { Card, Grid } from "@nextui-org/react";
+import ArtistTotalPayout from "../models/ArtistTotalPayout";
+import { ArtistRealPayout } from "../models/ArtistRealPayout";
 
 interface ArtistLineItemProps {
   name: string;
   rank: number;
   plays: number;
   image: string;
-  paidAmount: number;
+  totalPay: ArtistTotalPayout;
+  realPay: ArtistRealPayout;
 }
 
 export default function ArtistLineItem(props: ArtistLineItemProps) {
@@ -18,7 +21,12 @@ export default function ArtistLineItem(props: ArtistLineItemProps) {
           </Grid>
           <Grid xs={2}>{props.name}</Grid>
           <Grid xs={1}>{props.plays}</Grid>
-          <Grid xs={1}>${props.paidAmount}</Grid>
+          <Grid xs={1}>
+            ${props.totalPay.spotify} (${props.realPay.spotify})
+          </Grid>
+          <Grid xs={1}>
+            ${props.totalPay.appleMusic} (${props.realPay.appleMusic})
+          </Grid>
         </Grid.Container>
       </Card.Body>
     </Card>

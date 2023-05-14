@@ -5,6 +5,9 @@ import { Text } from "@nextui-org/react";
 import { useParams } from "react-router-dom";
 import Artist from "../models/Artist";
 import ArtistLineItem from "../component/ArtistLineItem";
+import ArtistTotalPayout from "../models/ArtistTotalPayout";
+import { ArtistRealPayout } from "../models/ArtistRealPayout";
+import PayoutData from "../data/payoutData";
 
 interface ResultDetails {
   totalPaid: number;
@@ -18,6 +21,8 @@ interface ArtistResult {
   playCount: number;
   paidAmount: number;
   rank: number;
+  totalPay: ArtistTotalPayout;
+  realPay: ArtistRealPayout;
 }
 
 export default function Results() {
@@ -42,8 +47,14 @@ export default function Results() {
       }
     };
 
-    const calcTotal = (playCount: number) => {
-      return Number((playCount * 0.003).toFixed(2));
+    const calcTotal = (playCount: number, perPlay: number) => {
+      return Number((playCount * perPlay).toFixed(2));
+    };
+
+    const calcRealTotal = (playCount: number, perPlay: number) => {
+      return Number(
+        (playCount * perPlay * PayoutData.artistRealCutPercentage).toFixed(2)
+      );
     };
 
     const mapResults = (data: Artist[]) => {
@@ -52,9 +63,16 @@ export default function Results() {
         return {
           name: a.name,
           playCount: playCount,
-          paidAmount: calcTotal(playCount),
           thumbImage: a.image.filter((x) => x.size === "small")[0]["#text"],
           rank: a["@attr"].rank,
+          totalPay: {
+            spotify: calcTotal(playCount, PayoutData.spotify),
+            appleMusic: calcTotal(playCount, PayoutData.appleMusic),
+          } as ArtistTotalPayout,
+          realPay: {
+            spotify: calcRealTotal(playCount, PayoutData.spotify),
+            appleMusic: calcRealTotal(playCount, PayoutData.appleMusic),
+          } as ArtistRealPayout,
         } as ArtistResult;
       });
 
@@ -62,7 +80,7 @@ export default function Results() {
 
       let results = {
         artists: artistList,
-        totalPaid: calcTotal(totalPlays),
+        //totalPaid: calcTotal(totalPlays),
         totalPlays: totalPlays,
       } as ResultDetails;
 
@@ -82,8 +100,7 @@ export default function Results() {
         <>
           <Text h3>Results for {username}</Text>
           <Text h4>
-            Total paid out to {results.artists.length} artists for{" "}
-            {results.totalPlays} plays: ${results.totalPaid}
+            {results.totalPlays} plays for {results.artists.length} artists
           </Text>
           {results && (
             <ul>
@@ -94,7 +111,8 @@ export default function Results() {
                     rank={x.rank}
                     plays={x.playCount}
                     image={x.thumbImage}
-                    paidAmount={x.paidAmount}
+                    totalPay={x.totalPay}
+                    realPay={x.realPay}
                   />
                 );
               })}
