@@ -1,10 +1,11 @@
 import "./App.css";
 import { Outlet } from "react-router-dom";
+import { Text } from "@nextui-org/react";
 
 function App() {
   return (
     <>
-      <h1>Find shame in how much you consume</h1>
+      <Text h2>Find shame in how much you consume</Text>
       <hr />
       <Outlet />
     </>
